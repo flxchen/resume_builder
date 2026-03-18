@@ -11,8 +11,8 @@ const stopWords = new Set(["as","an","the","be","and","for","with","that",
 const techWords = new Set(["ITIL","PC","Mac","Jira","Windows","CompTIA","iPhone","C++",".NET","A/V",
 "information technology","AR/VR","UX","software","Microsoft","CCNA","Firewall","VPN","html","SharePoint",
 "php","css","javascript","Active Directory","router","computer","network","RJ45","Intune","Autopilot", 
-"SCCM","server","operating system","TCP","DHCP","DNS",
-"ServiceNow","Zendesk"]);
+"SCCM","server","operating system","TCP","DHCP","DNS","OneDrive","Azure","SQL","C#",
+"ServiceNow","Zendesk","Bing","Office 365","XBOX","Python"]);
 
 function extractKeywords() {
   let text = document.getElementById("jobInput").value;
@@ -40,8 +40,8 @@ function simpleMode(text) {
     patterns.forEach(regex=>{
       const matches = s.match(regex) || [];      
       matches.forEach(term => {
-        term = term.replace(/[(),]/,"");
-        term = term.split(/\s+/)   // splits on non-word chars
+        term = term.replace(/[(),]/g,"");
+        term = term.split(/\s+/) 
         .filter(word => word && !stopWords.has(word.toLowerCase()))
         .join(" ");
         if(!stopWords.has(term) && term.length > 1)techTerm.push(term);
@@ -61,27 +61,26 @@ function simpleMode(text) {
     }).map((w) => w.replace(/[^\w-]/g, "")) // remove punctuation, keep hyphen word
     .map((w) => w.trim())
     .filter((w) => w.length > 0);
-    cleaned.forEach(w => cleanedWords.push(w));    
-  });  
+    cleaned.forEach(w => cleanedWords.push(w));
+  }); 
 
   cleanedWords.forEach(term => {
     let lowerTerm = term.toLowerCase();
-    if (techArr.some(t => lowerTerm.includes(t))) {
-      techTerm.push(term);
+    if (techArr.some(t => lowerTerm === t)) {      
+      techTerm.push(term);      
     }
   });
   techFinal = techTerm
   .filter(term =>
-      techArr.some(t => term.toLowerCase().includes(t))
-  ).sort((a,b) => b.length - a.length)
+      techArr.some(t => term.toLowerCase().includes(t))//includes term contains technical word
+  )
   .filter(term => {
-    const lower = term.toLowerCase().replace(/[^a-z0-9]/g,"");
-    // skip if already covered by a longer term
-    if ([...seen].some(s => s.includes(lower))) return false;
+    const lower = term.toLowerCase().replace(/[^a-z0-9+#.]/g,"");//normalize term
+    if ([...seen].some(s => s.includes(lower))) return false;//remove words with duplicate part
     seen.add(lower);
     return true;
-  });  
-  displayResults(techFinal,"");  
+  });
+  displayResults(techFinal,"");
 }
 
 
