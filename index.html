@@ -1,6 +1,20 @@
 <!doctype html>
 <html>
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-ZZVVWQBCPZ"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-ZZVVWQBCPZ");
+    </script>
     <meta charset="UTF-8" />
     <title>Extract job keyword</title>
     <link rel="stylesheet" href="style.css" />
@@ -13,7 +27,7 @@
         id="jobInput"
         placeholder="Paste job description here..."
       ></textarea>
-      <button id="extractBtn">Find keywords</button>      
+      <button id="extractBtn">Find keywords</button>
       <div class="results" id="results"></div>
     </div>
     <script src="function.js"></script>
